@@ -1,4 +1,5 @@
-version: '3.8'
+
+version: "3.8"
 
 services:
   apis:
@@ -7,7 +8,7 @@ services:
       - STAGE=local
     build:
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: dockerfile
     ports:
       - 9999:9999
     restart: on-failure
@@ -23,8 +24,8 @@ services:
     container_name: postgres
     environment:
       - POSTGRES_PASSWORD=123456
-      - POSTGRES_USER=root
-      - POSTGRES_DB=shopprs-pg
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=wealthcaredb
       - DATABASE_HOST=localhost
     image: postgres:latest
     networks:
@@ -35,8 +36,30 @@ services:
     volumes:
       - postgres-volume:/data
 
+  n8n:
+    container_name: n8n
+    image: docker.n8n.io/n8nio/n8n
+    ports:
+      - 5678:5678
+    networks:
+      - wealthcareainetwork
+    volumes:
+      - n8n_data:/home/node/.n8n
+
+  fi-mcp-dev:
+    container_name: fi-mcp-dev
+    build:
+      context: ./fi-mcp/fi-mcp-dev/
+      dockerfile: dockerfile
+    ports:
+      - 1221:8080 
+    networks:
+      - wealthcareainetwork
+
 volumes:
   postgres-volume:
+    driver: local
+  n8n_data:
     driver: local
 
 networks:
