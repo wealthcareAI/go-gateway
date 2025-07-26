@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  apis:
+    container_name: wealthcare-ai-gateway
+    environment:
+      - STAGE=local
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - 9999:9999
+    restart: on-failure
+    volumes:
+      - ${HOME}/.aws/credentials:/root/.aws/credentials:ro
+      - ~/logs/go-docker:/app/logs
+    networks:
+      - wealthcareainetwork
+    depends_on:
+      - postgres
+
+  postgres:
+    container_name: postgres
+    environment:
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_USER=root
+      - POSTGRES_DB=shopprs-pg
+      - DATABASE_HOST=localhost
+    image: postgres:latest
+    networks:
+      - wealthcareainetwork
+    hostname: localhost
+    ports:
+      - 5431:5432
+    volumes:
+      - postgres-volume:/data
+
+volumes:
+  postgres-volume:
+    driver: local
+
+networks:
+  wealthcareainetwork:
