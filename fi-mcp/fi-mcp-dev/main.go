@@ -6,7 +6,6 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"time"
 
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
@@ -44,18 +43,18 @@ func main() {
 
 	httpMux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
-	sse := server.NewSSEServer(
-		s,
-		// server.WithBaseURL("http://fi-mcp-dev:1234"),
-		server.WithSSEEndpoint("/mcp/sse"),
-		server.WithMessageEndpoint("/mcp/message"),
-		server.WithKeepAlive(true),
-		server.WithKeepAliveInterval(30*time.Second),
-		server.WithUseFullURLForMessageEndpoint(false),
-	)
+	// sse := server.NewSSEServer(
+	// 	s,
+	// 	// server.WithBaseURL("http://fi-mcp-dev:1234"),
+	// 	server.WithSSEEndpoint("/mcp/sse"),
+	// 	server.WithMessageEndpoint("/mcp/message"),
+	// 	server.WithKeepAlive(true),
+	// 	server.WithKeepAliveInterval(30*time.Second),
+	// 	server.WithUseFullURLForMessageEndpoint(false),
+	// )
 
-	httpMux.Handle("/mcp/sse", sse.SSEHandler())
-	httpMux.Handle("/mcp/message", sse.MessageHandler())
+	// httpMux.Handle("/mcp/sse", sse.SSEHandler())
+	// httpMux.Handle("/mcp/message", sse.MessageHandler())
 
 	httpMux.Handle("/mcp/", streamableServer)
 
