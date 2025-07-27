@@ -1,0 +1,10 @@
+name: New MCP server
+version: 0.0.1
+schema: v1
+mcpServers:
+  - name: Fi new
+    command: npx
+    args:
+      - mcp-remote
+      - http://localhost:1221/mcp/stream
+    env: {}

@@ -2,17 +2,19 @@
 DOCKER_IMAGE=wealthcare-ai-gateway
 DOCKER_TAG=latest
 
-# Docker commands
-docker-build:
-	docker build -t $(DOCKER_IMAGE):$(DOCKER_TAG) .
+FI_DOCKER_IMAGE=fi-mcp-dev
+FI_DOCKER_TAG=latest
 
-docker-run:
+# Docker commands
+build:
+	docker build -t $(DOCKER_IMAGE):$(DOCKER_TAG) .
+	docker build -t $(FI_DOCKER_IMAGE):$(FI_DOCKER_TAG) .
 	docker-compose up -d
 
-docker-stop:
+stop:
 	docker-compose down
 
-docker-rebuild:
+rebuild:
 	docker-compose down
 	docker-compose build --no-cache
 	docker-compose up -d
