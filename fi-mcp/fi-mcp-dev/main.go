@@ -40,6 +40,16 @@ func main() {
 
 	streamableServer := server.NewStreamableHTTPServer(s,
 		server.WithEndpointPath("/stream"),
+		server.WithHTTPContextFunc(func(ctx context.Context, r *http.Request) context.Context {
+			sid := r.URL.Query().Get("sid")
+			sessionid := r.URL.Query().Get("sessionId")
+			fmt.Println("sid in query::", sid)
+			fmt.Println("sessionId in query::", sessionid)
+			if sid != "" {
+				ctx = context.WithValue(ctx, "sid", sid)
+			}
+			return ctx
+		}),
 	)
 
 	httpMux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))

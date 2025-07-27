@@ -32,7 +32,13 @@ func (m *AuthMiddleware) AuthMiddleware(next server.ToolHandlerFunc) server.Tool
 		// fetch sessionId from context
 		// this gets populated for every tool call
 		sessionId := server.ClientSessionFromContext(ctx).SessionID()
-		fmt.Println("sessionId in middleware: ", sessionId)
+		fmt.Println("sessionId before", sessionId)
+		if sId, ok := ctx.Value("sid").(string); ok {
+			sessionId = sId
+		}
+
+		fmt.Println("sessionId after", sessionId)
+
 		phoneNumber, ok := m.sessionStore[sessionId]
 		if !ok {
 			loginUrl := m.getLoginUrl(sessionId)
